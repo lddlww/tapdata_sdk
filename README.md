@@ -21,7 +21,7 @@ pip install tapdata-sdk
 Or install from source:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/lddlww/tapdata_sdk.git
 cd tapdata-sdk
 pip install -e .
 ```
