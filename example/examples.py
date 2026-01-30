@@ -1,5 +1,5 @@
 """
-Tapdata SDK 使用示例
+Tapdata SDK Usage Examples
 """
 from tapdata_sdk import (
     TapdataClient,
@@ -11,55 +11,55 @@ from tapdata_sdk import (
 
 
 def example_basic_usage():
-    """基本使用示例"""
-    # 初始化客户端
-    client = TapdataClient("http://10.49.4.153:3030")
+    """Basic usage example"""
+    # Initialize client
+    client = TapdataClient("http://localhost:3030")
     
-    # 登录
+    # Login
     try:
-        token = client.login("admin@admin.com", "abcd.1234")
-        print("✓ 登录成功", token)
+        token = client.login("admin@admin.com", "password")
+        print("✓ Login successful", token)
     except TapdataError as e:
-        print(f"✗ 登录失败: {e.message}")
+        print(f"✗ Login failed: {e.message}")
         return
     
-    # 查询连接
-    connections = client.connections.list(name="doubled")
-    print(f"\n总共 {len(connections)} 个连接:")
+    # Query connections
+    connections = client.connections.list(name="test")
+    print(f"\nTotal {len(connections)} connections:")
     for conn in connections:
         print(f"  - {conn}")
     
-    # 查询任务
-    tasks = client.tasks.list(name="kpy")
-    print(f"\n总共 {len(tasks)} 个任务:")
+    # Query tasks
+    tasks = client.tasks.list(name="test")
+    print(f"\nTotal {len(tasks)} tasks:")
     for task in tasks:
-        print(f"  -{task}")
+        print(f"  - {task}")
 
 
 def example_connection_management():
-    """连接管理示例"""
-    client = TapdataClient("http://10.49.4.153:3030")
-    client.login("admin@admin.com", "abcd.1234")
+    """Connection management example"""
+    client = TapdataClient("http://localhost:3030")
+    client.login("admin@admin.com", "password")
     
-    # 查询源连接
-    print("\n=== 源连接 ===")
+    # Query source connections
+    print("\n=== Source Connections ===")
     source_connections = client.connections.list_source()
     for conn in source_connections:
         print(f"  {conn}")
     
-    # 查询 MySQL 连接
-    print("\n=== MySQL 连接 ===")
+    # Query MySQL connections
+    print("\n=== MySQL Connections ===")
     mysql_connections = client.connections.list_mysql()
     for conn in mysql_connections:
         print(f"  {conn.name}: {conn.status}")
     
-    # 查询有效连接
-    print("\n=== 有效连接 ===")
+    # Query valid connections
+    print("\n=== Valid Connections ===")
     valid_connections = client.connections.list_valid()
-    print(f"  共 {len(valid_connections)} 个有效连接")
+    print(f"  Total {len(valid_connections)} valid connections")
     
-    # 使用枚举过滤
-    print("\n=== MySQL 源连接 ===")
+    # Filter using enums
+    print("\n=== MySQL Source Connections ===")
     connections = client.connections.list(
         connection_type=ConnectionType.SOURCE,
         database_type=DatabaseType.MYSQL,
@@ -70,68 +70,68 @@ def example_connection_management():
 
 
 def example_task_management():
-    """任务管理示例"""
-    client = TapdataClient("http://10.49.4.153:3030")
-    client.login("admin@admin.com", "abcd.1234")
+    """Task management example"""
+    client = TapdataClient("http://localhost:3030")
+    client.login("admin@admin.com", "password")
     
-    # 查询运行中的任务
-    print("\n=== 运行中的任务 ===")
+    # Query running tasks
+    print("\n=== Running Tasks ===")
     running_tasks = client.tasks.list_running()
     
     if running_tasks:
         task = running_tasks[0]
-        print(f"找到任务: {task.name} ({task.id})")
+        print(f"Found task: {task.name} ({task.id})")
         
-        # 停止任务
-        print("\n停止任务...")
+        # Stop task
+        print("\nStopping task...")
         try:
             result = client.tasks.stop(task.id)
-            print("✓ 任务已停止")
+            print("✓ Task stopped")
             sleep(5)
             result = client.tasks.start(task.id)
-            print("✓ 任务已开启", result)
+            print("✓ Task started", result)
         except TapdataError as e:
-            print(f"✗ 停止失败: {e.message}")
+            print(f"✗ Stop failed: {e.message}")
     else:
-        print("没有运行中的任务")
+        print("No running tasks")
     
-    # 查询所有任务
+    # Query all tasks
     all_tasks = client.tasks.list()
-    print(f"\n总共 {len(all_tasks)} 个任务:")
+    print(f"\nTotal {len(all_tasks)} tasks:")
     
-    # 按状态分组
+    # Group by status
     from collections import defaultdict
     tasks_by_status = defaultdict(list)
     for task in all_tasks:
         tasks_by_status[task.status].append(task)
     
     for status, tasks in tasks_by_status.items():
-        print(f"  {status}: {len(tasks)} 个")
+        print(f"  {status}: {len(tasks)} tasks")
 
 
 def example_task_logs():
-    """任务日志查询示例"""
+    """Task log query example"""
     import time
     
-    client = TapdataClient("http://10.49.4.153:3030")
-    client.login("admin@admin.com", "abcd.1234")
+    client = TapdataClient("http://localhost:3030")
+    client.login("admin@admin.com", "password")
     
-    # 获取第一个任务
+    # Get first task
     tasks = client.tasks.list()
     if not tasks:
-        print("没有可用的任务")
+        print("No available tasks")
         return
     
     task = tasks[0]
-    print(f"查询任务日志: {task.name}")
+    print(f"Querying task logs: {task.name}")
     
     if not task.task_record_id:
-        print("任务没有 task_record_id")
+        print("Task has no task_record_id")
         return
     
-    # 查询最近一小时的日志
+    # Query logs from the last hour
     end_time = int(time.time() * 1000)
-    start_time = end_time - 50000  # 10秒前
+    start_time = end_time - 50000  # 10 seconds ago
     
     try:
         logs = client.tasks.get_logs(
@@ -143,85 +143,85 @@ def example_task_logs():
             page_size=20
         )
         
-        print(f"\n找到 {len(logs)} 条日志:")
-        for log in logs:  # 只显示前5条
+        print(f"\nFound {len(logs)} log entries:")
+        for log in logs:  # Show only first 5
             print(f"  {log}")
     except TapdataError as e:
-        print(f"✗ 查询日志失败: {e.message}")
+        print(f"✗ Query logs failed: {e.message}")
 
 
 def example_error_handling():
-    """错误处理示例"""
+    """Error handling example"""
     from tapdata_sdk import (
         TapdataAuthError,
         TapdataTimeoutError,
         TapdataConnectionError,
     )
     
-    client = TapdataClient("http://10.49.4.153:3030")
+    client = TapdataClient("http://localhost:3030")
     
-    # 处理认证错误
+    # Handle authentication error
     try:
         client.login("wrong@email.com", "wrong_password")
     except TapdataAuthError as e:
-        print(f"认证失败: {e.message}")
-        print(f"错误码: {e.code}")
+        print(f"Authentication failed: {e.message}")
+        print(f"Error code: {e.code}")
     
-    # 处理超时错误
+    # Handle timeout error
     slow_client = TapdataClient(
-        "http://10.49.4.153:3030",
-        timeout=1  # 1秒超时
+        "http://localhost:3030",
+        timeout=1  # 1 second timeout
     )
     try:
         slow_client.get_timestamp()
     except TapdataTimeoutError as e:
-        print(f"请求超时: {e.message}")
+        print(f"Request timeout: {e.message}")
     
-    # 处理连接错误
+    # Handle connection error
     bad_client = TapdataClient("http://invalid-host:3030")
     try:
         bad_client.get_timestamp()
     except TapdataConnectionError as e:
-        print(f"连接错误: {e.message}")
+        print(f"Connection error: {e.message}")
 
 
 def example_advanced_features():
-    """高级功能示例"""
-    # 使用已有的 token
+    """Advanced features example"""
+    # Use existing token
     client = TapdataClient(
-        base_url="http://10.49.4.153:3030",
+        base_url="http://localhost:3030",
         access_token="existing-token-here"
     )
     
-    # 检查认证状态
+    # Check authentication status
     if client.is_authenticated():
-        print("✓ 已认证")
+        print("✓ Authenticated")
     else:
-        print("✗ 未认证，需要登录")
+        print("✗ Not authenticated, need to login")
     
-    # 自定义配置
+    # Custom configuration
     custom_client = TapdataClient(
-        base_url="http://10.49.4.153:3030",
-        timeout=60,  # 60秒超时
-        verify_ssl=False  # 禁用 SSL 验证（仅用于开发）
+        base_url="http://localhost:3030",
+        timeout=60,  # 60 second timeout
+        verify_ssl=False  # Disable SSL verification (for development only)
     )
     
-    # 使用完毕后登出
+    # Logout when done
     client.logout()
-    print("✓ 已登出")
+    print("✓ Logged out")
 
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("Tapdata SDK 示例")
+    print("Tapdata SDK Examples")
     print("=" * 60)
     
-    # 运行示例（取消注释想要运行的示例）
-    #example_basic_usage()
-    #example_connection_management()
-    #example_task_management()
+    # Run examples (uncomment the one you want to run)
+    # example_basic_usage()
+    # example_connection_management()
+    # example_task_management()
     example_task_logs()
     # example_error_handling()
     # example_advanced_features()
     
-    print("\n请取消注释想要运行的示例函数")
+    print("\nPlease uncomment the example function you want to run")
