@@ -11,7 +11,7 @@ requires-python = ">=3.7"
 license = {text = "MIT"}
 keywords = ["tapdata", "api", "client", "sdk", "data-integration"]
 authors = [
-    {name = "Your Name", email = "your.email@example.com"}
+    {name = "doubled", email = "309294891@qq.com"}
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -44,10 +44,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/tapdata-sdk"
-Documentation = "https://github.com/lddlww/tapdata-sdk#readme"
-Repository = "https://github.com/lddlww/tapdata-sdk"
-Issues = "https://github.com/lddlww/tapdata-sdk/issues"
+Homepage = "https://github.com/lddlww/tapdata_sdk"
+Documentation = "https://github.com/lddlww/tapdata_sdk#readme"
+Repository = "https://github.com/lddlww/tapdata_sdk"
+Issues = "https://github.com/lddlww/tapdata_sdk/issues"
 
 [tool.setuptools]
 packages = ["tapdata_sdk"]
