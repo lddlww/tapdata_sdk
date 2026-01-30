@@ -22,7 +22,7 @@ Or install from source:
 
 ```bash
 git clone https://github.com/lddlww/tapdata_sdk.git
-cd tapdata-sdk
+cd tapdata_sdk
 pip install -e .
 ```
 
