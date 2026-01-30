@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tapdata-sdk"
-version = "0.2.0"
+version = "0.1.0"
 description = "A Python client library for interacting with Tapdata API"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -45,9 +45,9 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/yourusername/tapdata-sdk"
-Documentation = "https://github.com/yourusername/tapdata-sdk#readme"
-Repository = "https://github.com/yourusername/tapdata-sdk"
-Issues = "https://github.com/yourusername/tapdata-sdk/issues"
+Documentation = "https://github.com/lddlww/tapdata-sdk#readme"
+Repository = "https://github.com/lddlww/tapdata-sdk"
+Issues = "https://github.com/lddlww/tapdata-sdk/issues"
 
 [tool.setuptools]
 packages = ["tapdata_sdk"]
