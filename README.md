@@ -281,7 +281,7 @@ isort tapdata_sdk/
 
 ## Changelog
 
-### v0.2.0 (2024-01-29)
+### v0.2.0 (2026-01-29)
 - ✨ Refactored code architecture with modular design
 - 📦 Added data model classes (Connection, Task, TaskLog)
 - 🎯 Improved enum types using Python Enum
