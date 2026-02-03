@@ -14,7 +14,7 @@ from .exceptions import (
     TapdataError,
     TapdataTimeoutError,
 )
-from .models import Connection, Task, TaskDetail, TaskLog
+from .models import Connection, Task, TaskDetail, TaskLog, TaskRelation
 from .utils import rc4_encrypt, gen_sign, build_filter
 from .enums import ConnectionType, DatabaseType, Status, LogLevel
 
@@ -363,6 +363,28 @@ class TaskClient:
         """
         resp = self.client._request("GET", f"/api/Task/{task_id}")
         return TaskDetail.from_dict(resp["data"])
+
+    def get_table_relation(self, task_id: str) -> TaskRelation:
+        """
+        Get Task Table Name Relation
+
+        Args:
+            task_id: Unique identifier for the task
+
+        Returns:
+            TaskRelation
+        """
+        task_detail = self.get(task_id)
+
+        relation = TaskRelation.from_dict(task_detail.to_dict())
+
+        if relation.source_connection_id:
+            relation.source_conn = self.client.connections.get(relation.source_connection_id)
+
+        if relation.target_connection_id:
+            relation.target_conn = self.client.connections.get(relation.target_connection_id)
+
+        return relation
     
     def list_running(self) -> List[Task]:
         """Get all running tasks"""

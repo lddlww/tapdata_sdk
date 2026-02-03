@@ -1,6 +1,6 @@
 """Data model definitions"""
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 
 @dataclass
@@ -124,6 +124,55 @@ class TaskDetail:
             "nodes": self.nodes
         }
 
+@dataclass
+class TaskRelation:
+    """
+    Task connection relationship mapping model
+    """
+    source_connection_id: Optional[str] = None
+    target_connection_id: Optional[str] = None
+    table_name_relation: Optional[Dict[str, str]] = None
+    source_conn: Optional[Connection] = None
+    target_conn: Optional[Connection] = None
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "TaskRelation":
+        """
+        Create TaskRelation from task detail dictionary
+
+        Args:
+            data: Raw task data from API (containing 'dag' and 'nodes')
+        """
+        nodes = data.get("nodes", [])
+
+        if len(nodes) < 2:
+            return cls()
+
+        source_node = nodes[0]
+        target_node = nodes[-1]
+
+        relations = {}
+        for obj in target_node.get("syncObjects", []):
+            if "tableNameRelation" in obj:
+                relations.update(obj["tableNameRelation"])
+
+        return cls(
+            source_connection_id=source_node.get("connectionId"),
+            target_connection_id=target_node.get("connectionId"),
+            table_name_relation=relations
+        )
+
+    def to_dict(self) -> dict:
+        """
+        Convert to dictionary including nested connection details
+        """
+        return {
+            "source_connection_id": self.source_connection_id,
+            "target_connection_id": self.target_connection_id,
+            "table_name_relation": self.table_name_relation,
+            "source": self.source_conn.to_dict() if self.source_conn else None,
+            "target": self.target_conn.to_dict() if self.target_conn else None
+        }
 
 @dataclass
 class TaskLog:
