@@ -284,6 +284,8 @@ isort tapdata_sdk/
 ```
 
 ## Changelog
+### v0.3.0 (2026-02-03)
+- ✨ added TaskDetail and TaskRelation function
 
 ### v0.2.0 (2026-01-29)
 - ✨ Refactored code architecture with modular design

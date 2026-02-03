@@ -20,7 +20,7 @@ Examples:
     >>> client.tasks.stop(tasks[0].id)
 """
 from .client import TapdataClient, ConnectionClient, TaskClient
-from .models import Connection, Task, TaskLog
+from .models import Connection, Task, TaskLog, TaskDetail, TaskRelation
 from .enums import ConnectionType, DatabaseType, Status, LogLevel
 from .exceptions import (
     TapdataError,
