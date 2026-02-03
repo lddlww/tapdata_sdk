@@ -48,6 +48,10 @@ for conn in connections:
 tasks = client.tasks.list()
 for task in tasks:
     print(f"{task.name}: {task.status}")
+
+# Get Table Relation
+table_relation = client.tasks.get_table_relation(task_id='xxx')
+print(f"{table_relation.table_name_relation}")
 ```
 
 ### Connection Management
